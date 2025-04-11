@@ -1,0 +1,6 @@
+# 依赖忽略
+node_modules/
+# 打包忽略
+dist/
+
+.env
