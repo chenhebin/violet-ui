@@ -1,9 +1,11 @@
 import React from "react";
+import './App.css' // 新增这行全局引入
+import styles from './App.css'
 
 const App = () => {
     return (
-        <div>
-            <h1>🚀 Hello from Violet UI + Rollup + React + TS！！！</h1>
+        <div className={"container"}>
+            <h1 className={styles.title}>🚀 Hello from Violet UI</h1>
         </div>
     )
 }

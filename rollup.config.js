@@ -2,13 +2,18 @@ import babel from '@rollup/plugin-babel'
 import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
-import { cleandir } from 'rollup-plugin-cleandir'
 
 import serve from 'rollup-plugin-serve'
+import postcss from 'rollup-plugin-postcss'
+import { cleandir } from 'rollup-plugin-cleandir'
 import livereload from 'rollup-plugin-livereload'
+
+import cssnano from 'cssnano'
 import { config } from 'dotenv'
 import { fileURLToPath } from 'url';
+import autoprefixer from 'autoprefixer'
 import path from 'path'; // 修改导入方式
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url)); // 使用 path 的方法
 // 根据环境加载对应的配置文件
 config({
@@ -32,6 +37,15 @@ const baseConfig = {
         replace({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
             preventAssignment: true
+        }),
+        postcss({
+            modules: true,
+            extract: 'bundle.css',
+            minimize: isProduction, // 仅在生产环境压缩
+            plugins: [
+                autoprefixer(),  // 使用导入的模块
+                ...(isProduction ? [cssnano()] : []) // 生产环境才启用压缩
+            ]
         }),
         babel({
             babelHelpers: 'bundled',
