@@ -39,7 +39,7 @@ const baseConfig = {
             preventAssignment: true
         }),
         postcss({
-            modules: true,
+            modules: false,
             extract: 'bundle.css',
             minimize: isProduction, // 仅在生产环境压缩
             plugins: [
