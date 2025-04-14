@@ -1,0 +1,17 @@
+// tsconfig.build.json
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "declarationDir": "dist/types",
+        "rootDir": "src",
+        "noEmit": false
+    },
+    "include": ["src"],
+    "exclude": [
+        "node_modules",
+        "**/*.test.ts",
+        "**/*.test.tsx"
+    ]
+}
