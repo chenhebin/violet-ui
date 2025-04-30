@@ -5,17 +5,13 @@ import fs from 'fs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-export const getComponentEntries = () => {
-  const componentsDir = path.resolve(__dirname, '../src/components') // ✅ 确保指向组件目录
-  const entries = {}
-
-  fs.readdirSync(componentsDir).forEach((dir) => {
+export const getComponentOutput = (format) => {
+  // 获取组件目录下的所有组件
+  const componentsDir = path.resolve(__dirname, '../components') // ✅ 确保指向组件目录
+  // 读取组件目录下的所有子目录，返回每个子目录的路径
+  const comList = fs.readdirSync(componentsDir).filter((dir) => {
     const fullPath = path.join(componentsDir, dir)
-    const entryFile = path.join(fullPath, 'index.tsx') // ✅ 改为 index.tsx
-    if (fs.statSync(fullPath).isDirectory() && fs.existsSync(entryFile)) {
-      entries[`components/${dir}`] = entryFile // ✅ 路径保留前缀（方便输出结构）
-    }
-  })
-
-  return entries
+    return fs.statSync(fullPath).isDirectory() && fs.existsSync(path.join(fullPath, `${dir}.tsx`)) // ✅ 检查 index.tsx 是否存在
+  }).map((dir) => `src/components/${dir}/index.ts`)
+  return comList
 }

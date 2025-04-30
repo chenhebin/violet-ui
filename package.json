@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/cjs/components/index.js",
+  "module": "dist/esm/components/index.js",
   "types": "dist/esm/components/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
+    "clean": "rm -rf dist",
     "dev": "cross-env NODE_ENV=development rollup -c -w",
     "build:types": "tsc -p tsconfig.build.json",
-    "build": "cross-env NODE_ENV=production rollup -c --no-watch && pnpm build:types",
-    "lint": "eslint src --ext .ts,.tsx"
+    "build": "pnpm clean && pnpm build:css && cross-env NODE_ENV=production rollup -c --no-watch && pnpm build:types",
+    "build:css": "gulp"
   },
   "keywords": [],
   "author": "",
@@ -34,6 +35,8 @@
     "cross-env": "^7.0.3",
     "cssnano": "^7.0.6",
     "dotenv": "^16.5.0",
+    "gulp": "^5.0.0",
+    "gulp-postcss": "^10.0.0",
     "postcss": "^8.5.3",
     "rollup": "^4.39.0",
     "rollup-plugin-cleandir": "^3.0.0",
@@ -46,5 +49,13 @@
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "not ie < 8",
+    "last 2 versions",
+    "> 1%",
+    "iOS 7",
+    "last 3 iOS versions"
+  ]
 }

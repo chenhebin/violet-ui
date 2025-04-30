@@ -9,13 +9,12 @@ import postcss from 'rollup-plugin-postcss'
 import { cleandir } from 'rollup-plugin-cleandir'
 import livereload from 'rollup-plugin-livereload'
 
-import cssnano from 'cssnano'
 import { config } from 'dotenv'
 import { fileURLToPath } from 'url';
 import autoprefixer from 'autoprefixer'
 import path from 'path'; // 修改导入方式
 
-
+import { getComponentOutput } from './src/components/config.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url)); // 使用 path 的方法
 // 根据环境加载对应的配置文件
@@ -34,15 +33,6 @@ const basePlugins = [
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         preventAssignment: true
     }),
-    postcss({
-        modules: false, // 禁用 CSS 模块,
-        extract: true,
-        minimize: isProduction, // 仅在生产环境压缩
-        plugins: [
-            autoprefixer(),  // 使用导入的模块
-            ...(isProduction ? [cssnano()] : []) // 生产环境才启用压缩
-        ]
-    }),
     babel({
         babelHelpers: 'bundled',
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -50,12 +40,21 @@ const basePlugins = [
     }),
     resolve({ extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
     commonjs(),
-    ...(isProduction ? [] : [cleandir('dist')]) // 仅开发环境使用cleandir
+    // ...(isProduction ? [] : [cleandir('dist')]) // 仅开发环境使用cleandir
 ]
 
 // 开发环境插件 - fn避免重复调用（如果是对象，isProduction ? 1 : devConfig这个判断的时候就会执行serve，需要用方法返回来避免调用）
 const getDevPlugins = () => {
     return [
+        // 开发模式的时候，本地需要解析css，所以需要这个插件，生产环境不需要（使用gulp进行打包）
+        postcss({
+            modules: false, // 禁用 CSS Modules
+            extract: true, // 提取为单独文件
+            minimize: false, // 生产环境压缩
+            plugins: [
+                autoprefixer()
+            ]
+        }),
         serve({
             open: true,
             contentBase: [
@@ -81,7 +80,7 @@ const productionPlugins = [
 const resultConfig = {
     input: [
         'src/main.tsx',
-        'src/components/index.ts'
+        ...getComponentOutput() // 直接使用函数返回的数组，不需要额外的解构赋值
     ],
     output: [
         {
@@ -99,11 +98,13 @@ const resultConfig = {
     ],
     plugins: [
         ...basePlugins,
-       ...(isProduction? productionPlugins : getDevPlugins())
+        ...(isProduction ? productionPlugins : getDevPlugins())
     ],
     // 不这样设置：打包结果会把 .pnpm 的软链接结构直接保留到了输出目录里，会产生virtual目录和node_modules目录
     external: isProduction ? ((id) =>
         /^react/.test(id) ||
-        /^react-dom/.test(id)) : [] // 👈 外部依赖不被打包进来
+        /^react-dom/.test(id) ||
+        /\.css$/.test(id)  // 新增：排除所有CSS文件
+    ) : []
 }
 export default resultConfig
