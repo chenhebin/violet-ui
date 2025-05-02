@@ -6,7 +6,6 @@ import typescript from '@rollup/plugin-typescript'
 
 import serve from 'rollup-plugin-serve'
 import postcss from 'rollup-plugin-postcss'
-import { cleandir } from 'rollup-plugin-cleandir'
 import livereload from 'rollup-plugin-livereload'
 
 import { config } from 'dotenv'
@@ -14,7 +13,7 @@ import { fileURLToPath } from 'url';
 import autoprefixer from 'autoprefixer'
 import path from 'path'; // 修改导入方式
 
-import { getComponentOutput } from './src/components/config.js'
+// import { getComponentOutput } from './src/components/config.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url)); // 使用 path 的方法
 // 根据环境加载对应的配置文件
@@ -39,8 +38,7 @@ const basePlugins = [
         exclude: 'node_modules/**'
     }),
     resolve({ extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
-    commonjs(),
-    // ...(isProduction ? [] : [cleandir('dist')]) // 仅开发环境使用cleandir
+    commonjs()
 ]
 
 // 开发环境插件 - fn避免重复调用（如果是对象，isProduction ? 1 : devConfig这个判断的时候就会执行serve，需要用方法返回来避免调用）
@@ -49,7 +47,8 @@ const getDevPlugins = () => {
         // 开发模式的时候，本地需要解析css，所以需要这个插件，生产环境不需要（使用gulp进行打包）
         postcss({
             modules: false, // 禁用 CSS Modules
-            extract: true, // 提取为单独文件
+            extract: false, // 提取为单独文件
+            inject: true, // 注入到 JavaScript 文件中
             minimize: false, // 生产环境压缩
             plugins: [
                 autoprefixer()
@@ -80,7 +79,8 @@ const productionPlugins = [
 const resultConfig = {
     input: [
         'src/main.tsx',
-        ...getComponentOutput() // 直接使用函数返回的数组，不需要额外的解构赋值
+        'src/components/index.ts'
+        // ...getComponentOutput() // 直接使用函数返回的数组，不需要额外的解构赋值
     ],
     output: [
         {

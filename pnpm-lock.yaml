@@ -70,9 +70,6 @@ devDependencies:
   rollup:
     specifier: ^4.39.0
     version: 4.39.0
-  rollup-plugin-cleandir:
-    specifier: ^3.0.0
-    version: 3.0.0(rollup@4.39.0)
   rollup-plugin-livereload:
     specifier: ^2.0.5
     version: 2.0.5
@@ -1293,11 +1290,6 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
-    dev: true
-
-  /@mstssk/cleandir@2.0.0:
-    resolution: {integrity: sha512-CidYeaV4VQLIMbZlYqs0SJaZe/DyI0E4nsbFmPtCa2koKzMjZj/BThTCb+bvzcGhzp2A4Js1c4jDg6lqaqapyQ==}
-    hasBin: true
     dev: true
 
   /@rollup/plugin-babel@6.0.4(@babel/core@7.26.10)(rollup@4.39.0):
@@ -3792,15 +3784,6 @@ packages:
   /reusify@1.1.0:
     resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
-    dev: true
-
-  /rollup-plugin-cleandir@3.0.0(rollup@4.39.0):
-    resolution: {integrity: sha512-+1AlxObWpWechyLVcnpjbxBiYlQg7bXF7vw5fu6P9B0B8R4meQliG7aGCnK8MvtdXzKsjeI0lJc43d0UcQj1fg==}
-    peerDependencies:
-      rollup: '>=4.0.0'
-    dependencies:
-      '@mstssk/cleandir': 2.0.0
-      rollup: 4.39.0
     dev: true
 
   /rollup-plugin-livereload@2.0.5:

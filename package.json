@@ -39,7 +39,6 @@
     "gulp-postcss": "^10.0.0",
     "postcss": "^8.5.3",
     "rollup": "^4.39.0",
-    "rollup-plugin-cleandir": "^3.0.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-serve": "^3.0.0",
@@ -50,6 +49,11 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
+  "sideEffects": [
+    "*.md",
+    "dist/*",
+    "*.css"
+  ],
   "browserslist": [
     "defaults",
     "not ie < 8",
