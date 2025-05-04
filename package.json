@@ -46,6 +46,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "async-validator": "^4.2.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
